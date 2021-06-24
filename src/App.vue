@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <table>
+    <table :class="{ same_secret: alice_shared_secret === bob_shared_secret}">
       <tr>
         <th>Alice</th>
         <th>Public Numbers</th>
@@ -11,7 +11,7 @@
         <td>
           Alice Private Key: {{ alice_private }}
           <br>
-          <button @click="alice_private = generatePrivateKey(public_g)">Generate</button>
+          <button @click="alice_private = generatePrivateKey(public_p)">Generate</button>
         </td>
         <td>
           G={{ public_g }}
@@ -19,7 +19,7 @@
         <td>
           Bob Private Key: {{ bob_private }}
           <br>
-          <button @click="bob_private = generatePrivateKey(public_g)">Generate</button>
+          <button @click="bob_private = generatePrivateKey(public_p)">Generate</button>
         </td>
       </tr>
 
@@ -64,9 +64,8 @@ export default Vue.extend({
     }
   },
   methods: {
-    generatePrivateKey(g: number): number {
-      let key = Math.floor(Math.random() * g);
-      return key != 0 ? key : 1;
+    generatePrivateKey(p: number): number {
+      return Math.floor(Math.random() * (p-1)) + 1;
     },
     generateG(): number {
       return this.findPrimitive(this.public_p);
@@ -81,7 +80,7 @@ export default Vue.extend({
       return Object.values(result.slice(min));
     },
     generateP(): number {
-      const primes: Array<number> = this.getPrimes(100, 200);
+      const primes: Array<number> = this.getPrimes(50, 150);
       return primes[Math.floor(Math.random() * primes.length + 1) - 1];
     },
     isPrime(n: number): boolean {
@@ -157,8 +156,8 @@ export default Vue.extend({
   mounted() {
     this.public_p = this.generateP()
     this.public_g = this.generateG();
-    this.alice_private = this.generatePrivateKey(this.public_g);
-    this.bob_private = this.generatePrivateKey(this.public_g);
+    this.alice_private = this.generatePrivateKey(this.public_p);
+    this.bob_private = this.generatePrivateKey(this.public_p);
   },
   computed: {
     alice_public: function (): number {
@@ -198,7 +197,13 @@ table {
   }
 }
 
-.same_secrets {
-  border: 1px solid #1f950d;
+.same_secret {
+  td, th {
+    border: 5px solid #1f950d;
+  }
+}
+
+button {
+
 }
 </style>
