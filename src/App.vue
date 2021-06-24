@@ -15,8 +15,6 @@
         </td>
         <td>
           G={{ public_g }}
-        <br>
-          <button @click="public_g = generateG()">Generate</button>
         </td>
         <td>
           Bob Private Key: {{ bob_private }}
@@ -57,14 +55,10 @@ export default Vue.extend({
   name: 'App',
   data() {
     return {
-      //alice_public: 0,
       alice_private: 0,
-      //bob_public: 2,
       bob_private: 0,
       public_g: 5,
       public_p: 23,
-      //alice_shared_secret: 6,
-      //bob_shared_secret: 7,
     }
   },
   methods: {
@@ -72,7 +66,6 @@ export default Vue.extend({
       return Math.floor(Math.random() * g);
     },
     generateG(): number {
-      //return Math.floor(Math.random() * this.public_p);
       return this.findPrimitive(this.public_p);
     },
     getPrimes(min: number, max: number): Array<number> {
@@ -89,7 +82,6 @@ export default Vue.extend({
       return primes[Math.floor(Math.random() * primes.length + 1) - 1];
     },
     isPrime(n: number): boolean {
-      // Corner cases
       if (n <= 1)
         return false;
       if (n <= 3)
