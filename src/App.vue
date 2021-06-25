@@ -15,7 +15,7 @@
             Generate
           </button>
         </td>
-        <td>G={{ public_g }}</td>
+        <td>G = {{ public_g }}</td>
         <td>
           Bob Private Key: {{ bob_private }}
           <br />
@@ -28,7 +28,7 @@
       <tr>
         <td></td>
         <td>
-          p={{ public_p }}
+          p = {{ public_p }}
           <br />
           <button
               @click="
@@ -99,7 +99,9 @@ export default Vue.extend({
       return Object.values(result.slice(min));
     },
     generateP(): number {
-      const primes: Array<number> = this.getPrimes(5, 40);
+      let primes: Array<number> = this.getPrimes(5, 40);
+      primes[primes.indexOf(31)] = 11; // Work A Round
+      primes[primes.indexOf(31)] = 13;
       return primes[Math.floor(Math.random() * primes.length + 1) - 1];
     },
     isPrime(n: number): boolean {
@@ -128,7 +130,7 @@ export default Vue.extend({
     },
     isPrimitiveRootModulo(g: number, n: number): boolean {
       let found = new Set();
-      for (let i = 1; i < n * 100 /*hack - would need to detect cycles*/; i++) {
+      for (let i = n * 1000; i > 0  /*hack - would need to detect cycles*/; i--) {
         found.add(Math.pow(g, i) % n);
       }
       for (let i = 1; i < n; i++) {
